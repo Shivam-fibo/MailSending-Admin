@@ -34,7 +34,7 @@ const Dashboard = () => {
 
     try {
       const response = await fetch('https://mail-sending-backend.vercel.app/api/admin/updateUser', {
-        method: 'POST',
+        method: 'PUT',
         headers: {
           'Content-type': 'application/json',
         },
