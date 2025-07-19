@@ -8,7 +8,7 @@ const Dashboard = () => {
   useEffect(() => {
     const showAllUser = async () => {
       try {
-        const response = await fetch('https://mail-sending-backend.vercel.app/api/admin/allUser');
+        const response = await fetch('http://localhost:5000/api/admin/allUser');
         const data = await response.json();
         if (data) {
           setUser(data);
@@ -24,16 +24,11 @@ const Dashboard = () => {
     showAllUser();
   }, []);
 
-  const handleUpgrade = async (item) => {
-    if (item.isUpgrade) {
-      alert('User is already upgraded');
-      return;
-    }
-
+  const handleToggleUpgrade = async (item) => {
     const userId = item._id;
 
     try {
-      const response = await fetch('https://mail-sending-backend.vercel.app/api/admin/updateUser', {
+      const response = await fetch('http://localhost:5000/api/admin/updateUser', {
         method: 'PUT',
         headers: {
           'Content-type': 'application/json',
@@ -42,15 +37,18 @@ const Dashboard = () => {
       });
 
       if (response.ok) {
-        alert('User upgraded successfully');
+        const updatedUpgrade = !item.isUpgrade;
+        alert(`User ${updatedUpgrade ? 'upgraded' : 'downgraded'} successfully`);
         setUser((prev) =>
           prev.map((u) =>
-            u._id === userId ? { ...u, isUpgrade: true } : u
+            u._id === userId ? { ...u, isUpgrade: updatedUpgrade } : u
           )
         );
+      } else {
+        alert('Failed to update user');
       }
     } catch (error) {
-      alert('Failed to upgrade user');
+      alert('Request failed');
     }
   };
 
@@ -87,15 +85,14 @@ const Dashboard = () => {
             </div>
 
             <button
-              onClick={() => handleUpgrade(item)}
+              onClick={() => handleToggleUpgrade(item)}
               className={`mt-4 px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200 ${
                 item.isUpgrade
-                  ? 'bg-gray-300 text-gray-600 cursor-not-allowed'
+                  ? 'bg-red-500 text-white hover:bg-red-600'
                   : 'bg-indigo-600 text-white hover:bg-indigo-700'
               }`}
-              disabled={item.isUpgrade}
             >
-              {item.isUpgrade ? 'Already Upgraded' : 'Upgrade User'}
+              {item.isUpgrade ? 'Downgrade User' : 'Upgrade User'}
             </button>
           </div>
         ))}
