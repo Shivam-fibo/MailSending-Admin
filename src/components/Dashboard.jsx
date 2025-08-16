@@ -8,7 +8,7 @@ const Dashboard = () => {
   useEffect(() => {
     const showAllUser = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/admin/allUser');
+        const response = await fetch('http://localhost:5000/api/v1/admin/allUser');
         const data = await response.json();
         if (data) {
           setUser(data);
@@ -33,7 +33,7 @@ const Dashboard = () => {
     const userId = item._id;
 
     try {
-      const response = await fetch('http://localhost:5000/api/admin/updateUser', {
+      const response = await fetch('http://localhost:5000/api/v1/admin/updateUser', {
         method: 'POST',
         headers: {
           'Content-type': 'application/json',
