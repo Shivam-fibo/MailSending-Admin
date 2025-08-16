@@ -1,5 +1,7 @@
 import React from 'react'
 import { useState } from 'react'
+import {toast} from "react-toastify"
+import {useNavigate} from "react-router-dom"
 
 const Login = () => {
   const [email, setEmail] = useState("")
@@ -7,7 +9,7 @@ const Login = () => {
   const [otp, setOtp] = useState("")
   const [verifyState, setVerifyState] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-
+  const navigate = useNavigate()
   const handleSubmitLogin = async(e) => {
     e.preventDefault();
     setIsLoading(true)
@@ -25,10 +27,14 @@ const Login = () => {
       console.log("Response:", data);
       
       if(data.success){
+        toast.success("Login successful! Please verify OTP.")
         setVerifyState(true)
+      } else {
+        toast.error(data.message || "Login failed. Please try again.")
       }
     } catch (error) {
       console.error("Error:", error);
+      toast.error("Something went wrong. Please try again.")
     } finally {
       setIsLoading(false)
     }
@@ -48,12 +54,21 @@ const Login = () => {
       })
       const data = await response.json()
       console.log("Response", data)
+
+      if(data.success){
+        toast.success("OTP verified successfully! Redirecting...")
+        // here you could navigate to dashboard
+        navigate("/dashboard")
+      } else {
+        toast.error(data.message || "OTP verification failed.")
+      }
     } catch (error) {
       console.error("Error:", error);
+      toast.error("Something went wrong. Please try again.")
     } finally {
       setIsLoading(false)
     }
-  }
+  }  
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4 relative">
