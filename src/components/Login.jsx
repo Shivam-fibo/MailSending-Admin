@@ -20,7 +20,8 @@ const Login = () => {
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify({ email, password })
+        body: JSON.stringify({ email, password }),
+          credentials: "include"
       });
 
       const data = await response.json();
@@ -57,7 +58,6 @@ const Login = () => {
 
       if(data.success){
         toast.success("OTP verified successfully! Redirecting...")
-        // here you could navigate to dashboard
         navigate("/dashboard")
       } else {
         toast.error(data.message || "OTP verification failed.")
