@@ -17,18 +17,21 @@ function App() {
        try {
          const response = await fetch("http://localhost:5000/api/v1/admin/auth/checkAuth", {
            method: "GET",
-  credentials: "include"
+           credentials: "include"
          });
-        const data =await response.json();
-        if(data.ok){
-          setIsAuthorized(data.admin)
+        const data = await response.json();
+        if(data.success){
+          setIsAuthorized(true)
+        } else {
+          setIsAuthorized(false)
         }
        } catch (error) {
         console.log(error)
+        setIsAuthorized(false)
        }
       }
         adminAuth();
-  }, [])
+  }, [setIsAuthorized])
 
   return (
    <BrowserRouter>

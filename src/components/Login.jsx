@@ -1,7 +1,8 @@
 import React from 'react'
-import { useState } from 'react'
+import { useState, useContext } from 'react'
 import {toast} from "react-toastify"
 import {useNavigate} from "react-router-dom"
+import { Context } from '../main'
 
 const Login = () => {
   const [email, setEmail] = useState("")
@@ -10,6 +11,7 @@ const Login = () => {
   const [verifyState, setVerifyState] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const navigate = useNavigate()
+  const { setIsAuthorized } = useContext(Context)
   const handleSubmitLogin = async(e) => {
     e.preventDefault();
     setIsLoading(true)
@@ -58,6 +60,7 @@ const Login = () => {
 
       if(data.success){
         toast.success("OTP verified successfully! Redirecting...")
+        setIsAuthorized(true)
         navigate("/dashboard")
       } else {
         toast.error(data.message || "OTP verification failed.")
